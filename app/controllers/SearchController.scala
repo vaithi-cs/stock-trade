@@ -1,8 +1,9 @@
 package controllers
 
-import http.Api
+import http.{Api, WSApi}
 import javax.inject.Inject
 import play.api.libs.json.{Format, Json}
+import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,9 +20,10 @@ object StockInfo {
   implicit val stockInfoFormat: Format[StockInfo] = Json.format[StockInfo]
 }
 
-class SearchController @Inject() (httpApi: Api, val controllerComponents: ControllerComponents) extends BaseController {
+class SearchController @Inject() (client: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
   def searchStocks(stockName: String): Action[AnyContent] = Action.async {
     val url = """http://localhost:3000/stocks"""
+    val httpApi = new WSApi(client)
     val callApi = httpApi.read(url, List())
       .map(_.body)
       .map(body => Json.parse(body))
