@@ -13,4 +13,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.play"       %% "play-slick-evolutions"     % "5.0.0"
 )
 
-libraryDependencies += guice
+libraryDependencies ++= Seq(
+  guice, ws
+)
